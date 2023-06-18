@@ -7,14 +7,15 @@ import { Styles } from './styles/appStyles';
 import Home from './src/components/Home';
 import Login from './src/screens/Login';
 import Bottom from './src/components/Bottom';
+import Signup from './src/screens/Signup';
 
 
 export default function App() {
   return (
     <View style={Styles.container}>
-      <Login />
-      
-      <Bottom />
+      {/* <Login /> */}
+      <Signup />
+      {/* <Bottom /> */}
     </View>
   );
 }

@@ -180,14 +180,26 @@ export const Styles = StyleSheet.create({
     borderRadius: 5,
     marginVertical: 5,
     height: 60,
-    alignContent: 'center',
-    justifyContent: 'center',
+    alignItems: 'center',
   },
+  //text
   buttonText: {
     color: '#ffffff',
     fontSize: 16,
-  }
-
+  },
+  //text
+  messageBox: {
+    textAlign: 'center',
+    fontSize: 13,
+  },
+  //view
+  line: {
+    height: 1,
+    width: '100%',
+    backgroundColor: '#9ca3af',
+    marginVertical: 10,
+  },
+  
 });
 
 export const Colors = {
