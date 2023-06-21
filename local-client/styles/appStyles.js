@@ -1,22 +1,30 @@
-import { StyleSheet, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Dimensions,
+  TouchableOpacity,
+  View,
+  Text,
+  Image,
+  Button,
+} from "react-native";
 import { Constants } from "expo-constants";
+import { styled } from "styled-components";
 
 const { width, height } = Dimensions.get("screen");
 
 // const StatusBarHeight = Constants.StatusBarHeight;
 
-
+// will have to change to styled components later
 export const Styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
   innerContainer: {
     flex: 1,
-    width: '100%',
-    alignItems: 'center',
-
+    width: "100%",
+    alignItems: "center",
   },
   paragraph: {
     width: "90%",
@@ -106,19 +114,19 @@ export const Styles = StyleSheet.create({
   },
   ModalContainer: {
     padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
   },
-  modalButton : {
+  modalButton: {
     width: 60,
     height: 60,
     // backgroundColor: `${colors.tertiary}`,
     borderRadius: 50,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    position: 'absolute',
+    justifyContent: "center",
+    alignSelf: "center",
+    position: "absolute",
     bottom: 15,
   },
   pageImage: {
@@ -127,23 +135,23 @@ export const Styles = StyleSheet.create({
   },
   pageTitle: {
     fontSize: 30,
-    textAlign: 'center',
+    textAlign: "center",
     fontWeight: 600,
-    color: '#6d28d9',
-    padding: 10
+    color: "#6d28d9",
+    padding: 10,
   },
   subTitle: {
     fontSize: 18,
     marginBottom: 20,
     letterSpacing: 1,
     fontWeight: 600,
-    color: '#1f2937'
+    color: "#1f2937",
   },
   styledFormArea: {
-    width: '90%',
+    width: "90%",
   },
   styledTextInput: {
-    backgroundColor: '#e5e7e8',
+    backgroundColor: "#e5e7e8",
     padding: 15,
     paddingLeft: 55,
     paddingRight: 55,
@@ -152,64 +160,151 @@ export const Styles = StyleSheet.create({
     height: 60,
     marginVertical: 3,
     marginBottom: 10,
-    color: '#1f2937',
+    color: "#1f2937",
   },
   styledInputLabel: {
-    color: '#1f2937',
+    color: "#1f2937",
     fontSize: 13,
-    textAlign: 'left',
+    textAlign: "left",
   },
   leftIcon: {
     left: 15,
     top: 38,
-    position: 'absolute',
+    position: "absolute",
     zIndex: 1,
   },
   // rightIcon is touchable opacity
   rightIcon: {
     right: 15,
     top: 38,
-    position: 'absolute',
+    position: "absolute",
     zIndex: 1,
   },
   // touchable opacity
   styledButton: {
     padding: 15,
-    backgroundColor: '#6d28d9',
-    justifyContent: 'center',
+    backgroundColor: "#6d28d9",
+    justifyContent: "center",
     borderRadius: 5,
     marginVertical: 5,
     height: 60,
-    alignItems: 'center',
+    alignItems: "center",
   },
   //text
   buttonText: {
-    color: '#ffffff',
-    fontSize: 16,
+    color: "#ffffff",
+    fontSize: 15,
+    fontWeight: "500",
   },
   //text
   messageBox: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 13,
   },
   //view
   line: {
     height: 1,
-    width: '100%',
-    backgroundColor: '#9ca3af',
+    width: "100%",
+    backgroundColor: "#9ca3af",
     marginVertical: 10,
   },
-  
 });
 
 export const Colors = {
-  primary: '#332424',
-  secondary: '#4d3636',
-  tertiary: '#e6e6e6',
-  first: '#ffffff',
-  second: '#e5e7e8',
-  third: '#1f2937',
-  darkLight: '#9ca3af',
-  brand: '#6d28d9',
-}
+  primary: "#332424",
+  secondary: "#4d3636",
+  tertiary: "#e6e6e6",
+  first: "#ffffff",
+  second: "#e5e7e8",
+  third: "#1f2937",
+  darkLight: "#9ca3af",
+  brand: "#6d28d9",
+};
 
+const { primary, secondary, tertiary, first, second, third, darkLight, brand } =
+  Colors;
+
+// Styled Components
+
+export const WelcomeContainer = styled.View`
+  padding: 25px;
+  padding-top: 10px;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+  align-items: 'center';
+`;
+
+export const Avatar = styled.Image`
+  width: 250px;
+  height: 100px;
+  margin: auto;
+  border-radius: 50px;
+  border-width: 2px;
+  border-color: ${second}
+  margin-bottom: 10px;
+  margin-top: 10px;
+`;
+
+export const WelcomeImage = styled.Image`
+  height: 50%;
+  min-width: 100%;
+`;
+
+export const PageTitle = styled.Text`
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+  color: ${brand};
+  padding: 10px;
+
+  ${(props) =>
+    props.welcome &&
+    `
+    font-size: 35px;
+  `}
+`;
+
+export const SubTitle = styled.Text`
+  fontSize: 18px;
+  margin-bottom: 20px;
+  letter-spacing: 1;
+  font-weight: 600px;
+  color: ${third};
+
+  ${(props) =>
+    props.welcome &&
+    `
+    margin-bottom: 5px;
+    font-weight: normal;
+  `}
+`;
+
+export const StyledButton = styled.TouchableOpacity`
+  padding: 15px;
+  background-color: '#6d28d9';
+  justify-content: 'center';
+  border-radius: 5px;
+  margin-vertical: 5px;
+  height: 60px;
+  align-items: 'center';
+`;
+//text
+export const ButtonText = styled.Text`
+  color: '#ffffff';
+  font-size: 15px;
+  font-weight: 500px;
+`;
+
+//text
+export const MessageBox = styled.Text`
+  text-align: center;
+  font-size: 13px;
+`;
+//view
+export const Line = styled.View`
+  height: 1px;
+  width: 100%;
+  background-color: '#9ca3af';
+  margin-vertical: 10px;
+`;

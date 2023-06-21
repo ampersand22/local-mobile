@@ -7,15 +7,18 @@ import {
   StyleSheet,
   Pressable,
   Platform,
+  SafeAreaView,
+  ScrollView,
 } from "react-native";
 import { Styles, Colors } from "../../styles/appStyles";
 import sunflowerImg from "./../../assets/images/sunflower.jpeg";
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 //import formik
-import { Formik } from "formik";
+import { Formik, Form, Field } from "formik";
+import * as Yup from "yup";
 
 //icons
 import { Octicons, Ionicons, Fontisto } from "@expo/vector-icons";
@@ -26,46 +29,96 @@ import { Octicons, Ionicons, Fontisto } from "@expo/vector-icons";
 const Signup = () => {
   const [hidePassword, setHidePassword] = useState(true);
   const [showDate, setShowDate] = useState(false);
+
+  const [dateOfBirth, setDateOfBirth] = useState();
+  const [formReady, setFormReady] = useState(false);
+
+  // calendar
   const [date, setDate] = useState(new Date());
-  // const [showPicker, setShowPicker] = useState(false);
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [text, setText] = useState("Empty");
 
-  //
-  const [dob, setDob] = useState();
-
-  const onChangeOne = (e, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowDate(false);
-    setDate(currentDate);
-    setDob(currentDate);
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
   };
 
-  // android
+  const onChangeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === "ios");
+    setDate(currentDate);
+    setDateOfBirth(currentDate)
+
+    console.log(dateOfBirth)
+
+    let tempDate = new Date(currentDate);
+    let fDate =
+      tempDate.getDate() +
+      "/" +
+      (tempDate.getMonth() + 1) +
+      "/" +
+      tempDate.getFullYear();
+    let fTime =
+      "Hours:" + tempDate.getHours() + " | Minutes: " + tempDate.getMinutes();
+    setText(fDate + "\n" + fTime);
+    console.log(fDate + "(" + fTime + ")");
+  };
+
+  // const onChangeOne = (e, selectedDate) => {
+  //   const currentDate = selectedDate || date;
+  //   setShowDate(false);
+  //   setDate(currentDate);
+  //   setDateOfBirth(currentDate);
+  // };
+
   const showDatePicker = () => {
+    setShowDate(true);
+  };
+
+  const toggleDatePicker = () => {
     setShowDate(!showDate);
   };
+
+    //// NEED TO FIX ANDROID CALENDAR ////////
 
   const onChangeTwo = ({ type }, selectedDate) => {
     if (type == "set") {
       const currentDate = selectedDate;
       setShowDate(currentDate);
 
-      if (Platform.OS === 'android') {
-        showDatePicker();
+      if (Platform.OS === "android") {
+        toggleDatePicker();
+        setDateOfBirth(formatDate(currentDate));
       }
     } else {
-      showDatePicker();
+      toggleDatePicker();
     }
   };
+
+  // const confirmIOSDate = () => {
+  //   setdateOfBirth(formatDate(date));
+  //   toggleDatePicker();
+  // };
+
+  // const formatDate = (rawDate) => {
+  //   let date = new Date(rawDate);
+  //   let year = date.getFullYear();
+  //   let month = date. getMonth() + 1;
+  //   let day = date.getDate();
+
+  //   return `${day}-${month}-${year}`;
+  // }
 
   return (
     <View style={Styles.container}>
       <StatusBar style="dark" />
-      <View style={Styles.innerContainer}>
+      <ScrollView contentContainerStyle={Styles.innerContainer}>
         <Text style={Styles.pageTitle}>localRing</Text>
         <Text style={Styles.subTitle}>Account Signup</Text>
 
         {/* android specific code */}
-        {/* {showDate && (
+        {showDate && (
           <DateTimePicker
             // testID="dateTimePicker"
             value={date}
@@ -74,7 +127,32 @@ const Signup = () => {
             display="spinner"
             onChange={onChangeTwo}
           />
+        )}
+
+        {/* iOS specific code */}
+        {/* {showDate && (
+          <DateTimePicker
+            value={date}
+            placeholder="Jan 1 2000"
+            mode="date"
+            is24Hour={true}
+            display="spinner"
+            onChange={onChangeTwo}
+            style={styles.datePicker}
+          />
         )} */}
+
+        {/* dateTimePicker from ToThePoint */}
+        {showDate && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode="date"
+            is24Hour={true}
+            display="default"
+            onChange={onChangeOne}
+          />
+        )}
 
         <Formik
           initialValues={{
@@ -85,12 +163,19 @@ const Signup = () => {
             location: "",
             password: "",
             confirmPassword: "",
+            mobile: "",
           }}
           onSubmit={(values) => {
             console.log(values);
           }}
         >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
+          {({
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            setFieldValue,
+            values,
+          }) => (
             <View style={Styles.styledFormArea}>
               <MyTextInput
                 label="Full Name"
@@ -112,24 +197,45 @@ const Signup = () => {
                 keyboardType="email-address"
               />
 
-              <Pressable
-                onPress={showDatePicker}
-              >
-                <MyTextInput
-                  label="Date of Birth"
-                  icon="calendar"
-                  placeholder="date of birth..."
-                  placeholderTextColor="gray"
-                  // onChangeText={handleChange("dateOfBirth")}
-                  onBlur={handleBlur("dateOfBirth")}
-                  // value={dob ? dob.toDateString() : ""}
-                  value={dob}
-                  onChangeText={setDob}
-                  isDate={true}
-                  editable={false}
-                  // showDatePicker={showDatePicker}
-                />
-              </Pressable>
+              <MyTextInput
+                label="Date of Birth"
+                icon="calendar"
+                placeholder="select date"
+                placeholderTextColor="gray"
+                onBlur={handleBlur("dateOfBirth")}
+                value={dateOfBirth ? dateOfBirth.toDateString() : ""}
+                onChangeText={handleChange("dateOfBirth")}
+                isDate={true}
+                editable={false}
+                onPressIn={() => showMode('date')}                
+                format="MM-DD-YYYY"
+                showDatePicker={showDatePicker}
+                // toggleDatePicker={toggleDatePicker}
+                // onChangeText={handleChange("dateOfBirth")}
+              />
+
+              {/* IOS code */}
+              {show && (
+                <View style={styles.extraView}>
+                  <Text>Select Date:</Text>
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChangeDate}
+                  />
+                  <Text style={{ 
+                    margin: 20,
+                    borderWidth: 1, 
+                    paddingHorizontal: 10,
+                    paddingVertical: 5,
+                  }} onPress={() => setShow(false)}>
+                    Ok
+                  </Text>
+                </View>
+              )}
 
               <MyTextInput
                 label="Wrestler Name"
@@ -195,7 +301,7 @@ const Signup = () => {
             </View>
           )}
         </Formik>
-      </View>
+      </ScrollView>
     </View>
   );
 };
@@ -207,7 +313,9 @@ const MyTextInput = ({
   hidePassword,
   setHidePassword,
   isDate,
+  toggleDatePicker,
   showDatePicker,
+  showMode,
   ...props
 }) => {
   return (
@@ -277,6 +385,13 @@ export const styles = StyleSheet.create({
   textLinkContent: {
     color: "blue",
     fontSize: 13,
+  },
+  datePicker: {
+    height: 120,
+    marginTop: -10,
+  },
+  pickerButton: {
+    paddingHorizontal: 20,
   },
 });
 
