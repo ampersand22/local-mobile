@@ -104,7 +104,7 @@ export const Styles = StyleSheet.create({
   },
   input: {
     width: width / 1.1,
-    backgroundColor: "#fff",
+    backgroundColor: "#f0sf",
     padding: 10,
     shadowColor: "#ccc",
     shadowOffset: { width: 3, height: 3 },
@@ -192,9 +192,9 @@ export const Styles = StyleSheet.create({
   },
   //text
   buttonText: {
-    color: "#ffffff",
+    color: "#fff",
     fontSize: 15,
-    fontWeight: "500",
+    fontWeight: 500,
   },
   //text
   messageBox: {
@@ -214,7 +214,7 @@ export const Colors = {
   primary: "#332424",
   secondary: "#4d3636",
   tertiary: "#e6e6e6",
-  first: "#ffffff",
+  first: "#ff00ff",
   second: "#e5e7e8",
   third: "#1f2937",
   darkLight: "#9ca3af",
@@ -236,12 +236,12 @@ export const WelcomeContainer = styled.View`
 `;
 
 export const Avatar = styled.Image`
-  width: 250px;
+  width: 100px;
   height: 100px;
   margin: auto;
   border-radius: 50px;
   border-width: 2px;
-  border-color: ${second}
+  border-color: ${second};
   margin-bottom: 10px;
   margin-top: 10px;
 `;
@@ -268,8 +268,8 @@ export const PageTitle = styled.Text`
 export const SubTitle = styled.Text`
   fontSize: 18px;
   margin-bottom: 20px;
-  letter-spacing: 1;
-  font-weight: 600px;
+  letter-spacing: 1px;
+  font-weight: 600;
   color: ${third};
 
   ${(props) =>
@@ -291,9 +291,10 @@ export const StyledButton = styled.TouchableOpacity`
 `;
 //text
 export const ButtonText = styled.Text`
-  color: '#ffffff';
+  color: #ffffff;
   font-size: 15px;
-  font-weight: 500px;
+  font-weight: 500;
+  align-items: center;
 `;
 
 //text
@@ -308,3 +309,16 @@ export const Line = styled.View`
   background-color: '#9ca3af';
   margin-vertical: 10px;
 `;
+
+export const InnerContainer = styled.View`
+  flex: 1;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const TitleContainer = styled.View`
+    flex: 1;
+    width: 100%;
+    align-items: center;
+`
